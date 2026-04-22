@@ -1,14 +1,14 @@
 ﻿# ExcelMapper
 
-Desktopowa aplikacja Python + pywebview do przetwarzania zamówień Excel i generowania pliku wynikowego.
+ExcelMapper is a desktop Python + pywebview application for processing Excel-based orders and generating an output workbook.
 
-## Wymagania
+## Requirements
 
 - Windows
 - Python 3.12
-- Zależności zainstalowane w `.venv`
+- Project dependencies installed in `.venv`
 
-## Uruchomienie lokalne
+## Run Locally
 
 ```bat
 .venv\Scripts\python.exe gui_app.py
@@ -20,16 +20,16 @@ Desktopowa aplikacja Python + pywebview do przetwarzania zamówień Excel i gene
 build.bat
 ```
 
-Po buildzie aplikacja jest dostępna pod:
+After build, the application is available at:
 
 ```text
 dist\ExcelMapper\ExcelMapper.exe
 ```
 
-## Struktura
+## Project Structure
 
-- `gui_app.py` - backend i API dla frontendu
-- `frontend/` - UI (HTML/CSS/JS)
-- `src/` - pipeline przetwarzania danych
-- `app.spec` - konfiguracja PyInstaller
-- `hooks/hook_base_path.py` - runtime hook dla ścieżki bazowej
+- `gui_app.py` - backend and JS API bridge
+- `frontend/` - UI files (HTML/CSS/JS)
+- `src/` - data processing pipeline
+- `app.spec` - PyInstaller configuration
+- `hooks/hook_base_path.py` - runtime hook for base path handling
