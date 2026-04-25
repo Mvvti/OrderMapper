@@ -67,7 +67,7 @@ def build_final_records(records, template_columns, mapped_template_columns, test
             elif mapping == "test_data_utworzenia":
                 final_record[col] = test_data_utworzenia
             elif mapping == "const_oddzial_nazwa":
-                final_record[col] = "Politechnika Wrocławska"
+                final_record[col] = "Klient"
             elif mapping == "const_oddzial_id":
                 final_record[col] = "8960005851"
             elif mapping == "const_artykul_jednostka":
@@ -95,6 +95,7 @@ def build_final_records(records, template_columns, mapped_template_columns, test
             else:
                 final_record[col] = record.get(mapping)
 
+        final_record["_is_discontinued"] = record.get("is_discontinued", False)
         final_records.append(final_record)
 
     return final_records

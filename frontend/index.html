@@ -1,85 +1,208 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator pliku wyjściowego</title>
+    <title>Zamówienia</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <main class="app-shell">
-        <section class="card">
-            <header class="card-header">
-                <h1>Zamówienia Politechnika Wrocławska</h1>
-            </header>
-
-            <section class="form-grid" aria-label="Sekcja wyboru plików">
-                <div class="form-row">
-                    <label for="order-file">Plik zamówienia</label>
-                    <input id="order-file" type="text" placeholder="Wybierz plik zamówienia...">
-                    <button type="button" class="btn btn-secondary">Wybierz</button>
-                </div>
-
-                <div class="form-row">
-                    <label for="price-file">Plik cennika</label>
-                    <input id="price-file" type="text" placeholder="Wybierz plik cennika...">
-                    <button type="button" class="btn btn-secondary">Wybierz</button>
-                </div>
-
-                <div class="form-row">
-                    <label for="facility-file">Plik placówek</label>
-                    <input id="facility-file" type="text" placeholder="Wybierz plik placówek...">
-                    <button type="button" class="btn btn-secondary">Wybierz</button>
-                </div>
-
-                <div class="form-row">
-                    <label for="template-file">Plik template</label>
-                    <input id="template-file" type="text" placeholder="Wybierz plik template...">
-                    <button type="button" class="btn btn-secondary">Wybierz</button>
-                </div>
-
-                <div class="form-row">
-                    <label for="output-folder">Folder output</label>
-                    <input id="output-folder" type="text" placeholder="Wybierz folder output...">
-                    <button type="button" class="btn btn-secondary">Wybierz</button>
-                </div>
-            </section>
-
-            <section class="date-row" aria-label="Data utworzenia i termin dostawy">
-                <label for="delivery-date">Data utworzenia / termin dostawy</label>
-                <input id="delivery-date" type="text" value="2026-04-17">
-            </section>
-
-            <section class="action-row" aria-label="Akcje">
-                <button type="button" class="btn btn-primary">Generuj plik</button>
-                <button type="button" class="btn btn-secondary" id="preview-button">Podgląd</button>
-                <span class="status">Status: Gotowy</span>
-            </section>
-
-            <div class="progress-bar" id="progress-bar" aria-hidden="true">
-                <div class="progress-bar__fill"></div>
+    <div id="start-screen">
+        <div class="start-screen__shell">
+            <h1 class="start-screen__title">Wybierz schemat pracy</h1>
+            <p class="start-screen__subtitle">Wskaż panel, z którym chcesz pracować.</p>
+            <div class="start-screen__cards" role="group" aria-label="Wybór schematu">
+                <button type="button" class="start-card" id="start-card-pwr">
+                    <span class="start-card__title">Tryb Excel</span>
+                    <span class="start-card__desc">Uruchom panel przetwarzania plików Excel.</span>
+                </button>
+                <button type="button" class="start-card" id="start-card-pdf">
+                    <span class="start-card__title">Tryb PDF</span>
+                    <span class="start-card__desc">Przetwarzaj zamówienia z plików PDF.</span>
+                </button>
             </div>
+        </div>
+    </div>
 
-            <section id="preview-section" aria-label="Podgląd danych">
-                <h2>Podgląd danych (pierwszych 20 rekordów)</h2>
-                <div class="preview-summary" id="preview-summary"></div>
-                <div class="preview-table-wrap">
-                    <table class="preview-table" id="preview-table">
-                        <thead id="preview-head"></thead>
-                        <tbody id="preview-body"></tbody>
-                    </table>
+    <header class="topbar">
+        <span class="topbar__title">Zamówienia</span>
+        <nav class="topbar__nav">
+            <span class="topbar__link" id="btn-instrukcja">Instrukcja</span>
+            <span class="topbar__sep">│</span>
+            <span class="topbar__link" id="btn-pomoc">Pomoc</span>
+            <span class="topbar__sep">│</span>
+            <img src="../assets/hslogo.png" height="44" alt="Higma Service" class="topbar__logo" id="btn-logo">
+        </nav>
+    </header>
+
+    <div id="view-main">
+        <div class="pdf-toprow">
+            <button type="button" class="btn btn-secondary" id="btn-back-main">← Wróć</button>
+        </div>
+        <main class="app-shell" id="main-content">
+            <section class="card">
+                <header class="card-header">
+                    <h1>Tryb Excel</h1>
+                </header>
+
+                <section class="form-grid" aria-label="Sekcja wyboru plików">
+                    <div class="form-row">
+                        <label for="order-file">Plik zamówienia</label>
+                        <input id="order-file" type="text" placeholder="Wybierz plik zamówienia...">
+                        <button type="button" class="btn btn-secondary">Wybierz</button>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="price-file">Plik cennika</label>
+                        <input id="price-file" type="text" placeholder="Wybierz plik cennika...">
+                        <button type="button" class="btn btn-secondary">Wybierz</button>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="facility-file">Plik placówek</label>
+                        <input id="facility-file" type="text" placeholder="Wybierz plik placówek...">
+                        <button type="button" class="btn btn-secondary">Wybierz</button>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="template-file">Plik template</label>
+                        <input id="template-file" type="text" placeholder="Wybierz plik template...">
+                        <button type="button" class="btn btn-secondary">Wybierz</button>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="output-folder">Folder output</label>
+                        <input id="output-folder" type="text" placeholder="Wybierz folder output...">
+                        <button type="button" class="btn btn-secondary">Wybierz</button>
+                    </div>
+                </section>
+
+                <section class="date-row" aria-label="Data utworzenia i termin dostawy">
+                    <label for="delivery-date">Data utworzenia / termin dostawy</label>
+                    <input id="delivery-date" type="text">
+                </section>
+
+                <section class="action-row" aria-label="Akcje">
+                    <button type="button" class="btn btn-primary">Generuj plik</button>
+                    <span class="status">Status: Gotowy</span>
+                </section>
+
+                <div class="progress-bar" id="progress-bar" aria-hidden="true">
+                    <div class="progress-bar__fill"></div>
                 </div>
-            </section>
 
-            <section class="logs-section" aria-label="Logi">
-                <h2>Logi:</h2>
-                <textarea readonly spellcheck="false"></textarea>
+                <section class="logs-section" aria-label="Logi">
+                    <h2>Logi:</h2>
+                    <textarea readonly spellcheck="false"></textarea>
+                </section>
             </section>
-        </section>
-    </main>
+        </main>
+    </div>
+
+    <div id="pdf-panel" style="display:none">
+        <div class="pdf-toprow">
+            <button type="button" class="btn btn-secondary" id="btn-back-pdf">← Wróć</button>
+        </div>
+        <main class="pdf-shell">
+            <section class="card">
+                <header class="card-header">
+                    <h1>Tryb PDF</h1>
+                </header>
+
+                <section class="form-grid" aria-label="Sekcja wyboru plików PDF">
+                    <div class="form-row">
+                        <label for="pdf-pdf-file">Pliki zamówień PDF</label>
+                        <input id="pdf-pdf-file" type="text" placeholder="Wybierz co najmniej 1 plik PDF..." readonly>
+                        <button type="button" class="btn btn-secondary" id="pdf-btn-pick-pdf">Wybierz</button>
+                    </div>
+                    <div class="pdf-selected-files" id="pdf-selected-files">Brak wybranych plików.</div>
+
+                    <div class="form-row">
+                        <label for="pdf-output-folder">Folder output</label>
+                        <input id="pdf-output-folder" type="text" placeholder="Wybierz folder output...">
+                        <button type="button" class="btn btn-secondary" id="pdf-btn-pick-output">Wybierz</button>
+                    </div>
+                </section>
+
+                <section class="action-row" aria-label="Akcje PDF">
+                    <button type="button" class="btn btn-primary" id="pdf-generate-btn">Generuj plik</button>
+                    <span class="status" id="pdf-status">Status: Gotowy</span>
+                </section>
+
+                <div class="progress-bar" id="pdf-progress-bar" aria-hidden="true">
+                    <div class="progress-bar__fill"></div>
+                </div>
+
+                <section class="logs-section" aria-label="Logi PDF">
+                    <h2>Logi:</h2>
+                    <textarea id="pdf-logs" readonly spellcheck="false"></textarea>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <div id="view-instrukcja" style="display:none">
+        <div class="instrukcja-shell">
+            <button type="button" class="btn btn-secondary" id="btn-wróć">← Wróć</button>
+            <h1 class="instrukcja-title">Instrukcja — Tryb Excel</h1>
+            <div class="instrukcja-body">
+                <h2>Cel aplikacji</h2>
+                <p>Aplikacja automatycznie przetwarza plik zamówienia Excel na gotowy plik wynikowy zgodny z wymaganym szablonem. Eliminuje ręczne przepisywanie danych — dopasowuje produkty do cennika oraz placówki do listy obiektów.</p>
+
+                <h2>Jak korzystać krok po kroku</h2>
+                <ol>
+                    <li><strong>Plik zamówienia</strong> — kliknij "Wybierz" i wskaż plik Excel z zamówieniem.</li>
+                    <li><strong>Plik cennika</strong> — wypełniony automatycznie. Zmień tylko gdy cennik został zaktualizowany.</li>
+                    <li><strong>Plik placówek</strong> — wypełniony automatycznie. Zmień tylko gdy lista placówek uległa zmianie.</li>
+                    <li><strong>Plik template</strong> — wypełniony automatycznie. Zmień tylko gdy szablon wynikowy uległ zmianie.</li>
+                    <li><strong>Folder output</strong> — wskaż folder, do którego trafi gotowy plik.</li>
+                    <li><strong>Data</strong> — wpisz datę w formacie RRRR-MM-DD. Zostanie wpisana do pliku wynikowego jako data utworzenia i termin dostawy.</li>
+                    <li><strong>Kliknij "Generuj plik"</strong> — aplikacja przetworzy zamówienie i zapisze wynik w wybranym folderze.</li>
+                </ol>
+
+                <h2>Co oznaczają wyniki w logach</h2>
+                <ul>
+                    <li><strong>Rekordów</strong> — liczba wierszy w wygenerowanym pliku</li>
+                    <li><strong>Bez ceny</strong> — produkty nieznalezione w cenniku (wymagają ręcznego uzupełnienia)</li>
+                    <li><strong>Bez placówki</strong> — placówki nieznalezione w systemie (wymagają ręcznego uzupełnienia)</li>
+                    <li><strong>Plik</strong> — pełna ścieżka do wygenerowanego pliku Excel</li>
+                </ul>
+
+                <h2>Kolorowe komórki w pliku wynikowym</h2>
+                <ul>
+                    <li><strong>Żółte komórki</strong> — brakujące dane (cena lub placówka), które należy uzupełnić ręcznie.</li>
+                    <li><strong>Czerwone wiersze</strong> — produkt wycofany ze sprzedaży. Należy skontaktować się z klientem i wyjaśnić zamówienie.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-instrukcja-pdf" style="display:none">
+        <div class="instrukcja-shell">
+            <button type="button" class="btn btn-secondary" id="btn-wróć-pdf">← Wróć</button>
+            <h1 class="instrukcja-title">Instrukcja — Tryb PDF</h1>
+            <div class="instrukcja-body">
+                <h2>Cel aplikacji</h2>
+                <p>Aplikacja przetwarza zamówienia zakupu w formacie PDF i generuje jeden zbiorczy plik Excel gotowy do importu.</p>
+
+                <h2>Jak korzystać krok po kroku</h2>
+                <ol>
+                    <li><strong>Pliki zamówień PDF</strong> — kliknij "Wybierz" i wskaż jeden lub więcej plików PDF z zamówieniami.</li>
+                    <li><strong>Folder output</strong> — wskaż folder, do którego trafi gotowy plik.</li>
+                    <li><strong>Kliknij "Generuj plik"</strong> — aplikacja przetworzy wszystkie zamówienia i zapisze wynik jako wynik_pdf_zbiorczy.xlsx.</li>
+                </ol>
+
+                <h2>Co oznaczają wyniki w logach</h2>
+                <ul>
+                    <li><strong>Rekordów</strong> — łączna liczba pozycji ze wszystkich faktur</li>
+                    <li><strong>Plik</strong> — pełna ścieżka do wygenerowanego pliku Excel</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>

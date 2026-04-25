@@ -125,6 +125,7 @@ def export_to_excel(template_file_path, template_first_sheet_name, template_colu
     )
     alt_row_fill = PatternFill(fill_type="solid", start_color="FAFBFD", end_color="FAFBFD")
     missing_fill = PatternFill(fill_type="solid", start_color="FFF2CC", end_color="FFF2CC")
+    discontinued_fill = PatternFill(fill_type="solid", start_color="FEE2E2", end_color="FEE2E2")
 
     if end_row_to_write >= start_row_to_write:
         for row_num in range(start_row_to_write, end_row_to_write + 1):
@@ -180,6 +181,12 @@ def export_to_excel(template_file_path, template_first_sheet_name, template_colu
                     if obj_cell.value in (None, ""):
                         obj_cell.fill = missing_fill
 
+            # Wyróżnienie wycofanych produktów — czerwone tło całego wiersza.
+            row_offset = row_num - start_row_to_write
+            if row_offset < len(final_records) and final_records[row_offset].get("_is_discontinued"):
+                for col_number in range(1, len(template_columns) + 1):
+                    worksheet.cell(row=row_num, column=col_number).fill = discontinued_fill
+
     preview_rows = []
     preview_count = min(5, len(final_records))
     preview_columns = ["oddzial_id", "oddzial_nazwa", "obiekt_id", "obiekt_id_dostawcy", "Nazwa_miejsca_dostaw."]
@@ -195,6 +202,12 @@ def export_to_excel(template_file_path, template_first_sheet_name, template_colu
         for col_name, col_index in preview_column_indexes:
             row_preview[col_name] = worksheet.cell(row=row_num, column=col_index).value
         preview_rows.append(row_preview)
+
+    discontinued_codes = {
+        str(r.get("parsed_product_code")).strip()
+        for r in records
+        if r.get("is_discontinued")
+    }
 
     records_without_price = sum(1 for r in records if not r.get("match_found"))
     records_without_facility = sum(1 for r in records if not r.get("facility_match_found"))
@@ -221,7 +234,8 @@ def export_to_excel(template_file_path, template_first_sheet_name, template_colu
         report_file.write(f"Liczba rekordów bez dopasowanej placówki: {records_without_facility}\n\n")
         report_file.write("Unikalne niedopasowane kody produktów:\n")
         for code in unmatched_product_codes:
-            report_file.write(f"- {code}\n")
+            note = " (artykuł wycofany ze sprzedaży)" if code in discontinued_codes else ""
+            report_file.write(f"- {code}{note}\n")
         report_file.write("\nUnikalne niedopasowane placówki:\n")
         for facility in unmatched_facilities:
             report_file.write(f"- {facility}\n")

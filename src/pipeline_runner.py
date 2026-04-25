@@ -22,11 +22,22 @@ def run_pipeline(
         "P0806": "P0115",
         "4474": "175230",
         "120289": "100889",
+        "290067": "120067",
+        "7512694": "700531",
     }
 
+    discontinued_products = {
+        "7512698": "produkt wycofany ze sprzedaży",
+        "P743": "błąd rozmiaru",
+    }
+
+    _facility_code_parts = {
+        "C-18": ("POL", "WROC", "56"),
+        "C-19": ("POL", "WROC", "63"),
+    }
     manual_facility_overrides = {
-        "C-18": "POL_WROC_56",
-        "C-19": "POL_WROC_63",
+        key: "_".join(parts)
+        for key, parts in _facility_code_parts.items()
     }
 
     log("Wczytywanie plików...")
@@ -50,6 +61,14 @@ def run_pipeline(
         cennik_by_code,
         manual_product_overrides_normalized,
     )
+
+    for record in records:
+        raw_code = str(record.get("parsed_product_code") or "").strip()
+        if raw_code in discontinued_products:
+            record["is_discontinued"] = True
+            log(f"⚠️ UWAGA: Kod {raw_code} — {discontinued_products[raw_code]}. Sprawdź zamówienie!")
+        else:
+            record["is_discontinued"] = False
 
     log("Dopasowanie placówek...")
     single_placowka_to_data, normalized_facility_index, facility_by_kod = prepare_facility_indexes(placowki_df)

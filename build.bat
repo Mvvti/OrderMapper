@@ -26,6 +26,6 @@ if errorlevel 1 (
 
 echo.
 echo Build zakonczony powodzeniem.
-echo EXE: dist\ExcelMapper\ExcelMapper.exe
+echo EXE: dist\Zamowienia\Zamowienia.exe
 
 endlocal
